@@ -16,27 +16,20 @@ class ExpensesApp extends StatelessWidget {
     return MaterialApp(
       home: const MyHomePage(),
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.purple,
-        ).copyWith(
-          secondary: Colors.amber
-        ),
-        fontFamily: 'Quicksand',
-        appBarTheme: const AppBarTheme(
-          titleTextStyle: TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 20,
-            fontWeight: FontWeight.bold
-          )
-        ),
-        textTheme: ThemeData.light().textTheme.copyWith(
-          headline6: const TextStyle(
-            fontFamily: 'OpenSans',
-            fontSize: 18,
-            fontWeight: FontWeight.bold
-          )
-        )
-      ),
+          colorScheme: ColorScheme.fromSwatch(
+            primarySwatch: Colors.purple,
+          ).copyWith(secondary: Colors.amber),
+          fontFamily: 'Quicksand',
+          appBarTheme: const AppBarTheme(
+              titleTextStyle: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+          textTheme: ThemeData.light().textTheme.copyWith(
+              headline6: const TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold))),
     );
   }
 }
@@ -51,8 +44,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
 
-  List<Transaction> get _recentTransactions
-  {
+  List<Transaction> get _recentTransactions {
     return _transactions.where((element) {
       return element.date.isAfter(DateTime.now().subtract(
         const Duration(days: 7),
@@ -60,12 +52,11 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value, DateTime date)
-  {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
-      id: Random().nextDouble().toString(), 
-      title: title, 
-      value: value, 
+      id: Random().nextDouble().toString(),
+      title: title,
+      value: value,
       date: date,
     );
 
@@ -76,15 +67,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Navigator.of(context).pop();
   }
 
-  _removeTransaaction(String id)
-  { 
+  _removeTransaaction(String id) {
     setState(() {
       _transactions.removeWhere((element) => element.id == id);
     });
   }
 
-  _openTransactionFormModal(BuildContext context)
-  {
+  _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (_) {
@@ -95,22 +84,34 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final appBar = AppBar(
+      title: const Text('Despesas Pessoais'),
+      actions: <Widget>[
+        IconButton(
+          icon: const Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
+        ),
+      ],
+    );
+
+    final availableHeight = MediaQuery.of(context).size.height 
+    - appBar.preferredSize.height
+    - MediaQuery.of(context).padding.top;
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Despesas Pessoais'),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context),
-          ),
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(_transactions, _removeTransaaction),
+            Container(
+              height: availableHeight * 0.25,
+              child: Chart(_recentTransactions),
+            ),
+            Container(
+              height: availableHeight * 0.75,
+              child: TransactionList(_transactions, _removeTransaaction),
+            ),
           ],
         ),
       ),
