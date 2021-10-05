@@ -91,6 +91,15 @@ class _MyHomePageState extends State<MyHomePage> {
     final appBar = AppBar(
       title: const Text('Despesas Pessoais'),
       actions: <Widget>[
+        if (isLandsacape)
+          IconButton(
+            icon: Icon(_showChart ? Icons.list : Icons.bar_chart_outlined),
+            onPressed: () {
+              setState(() {
+                _showChart = !_showChart;
+              });
+            },
+          ),
         IconButton(
           icon: const Icon(Icons.add),
           onPressed: () => _openTransactionFormModal(context),
@@ -108,22 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            if (isLandsacape)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text('Exibir Gráfico'),
-                  Switch(
-                    value: _showChart,
-                    onChanged: (value) {
-                      setState(() {
-                        _showChart = value;
-                      });
-                    },
-                    activeColor: Theme.of(context).colorScheme.secondary,
-                  ),
-                ],
-              ),
             if (_showChart || !isLandsacape)
               Container(
                 height: availableHeight * (isLandsacape ? 0.7 : 0.3),
