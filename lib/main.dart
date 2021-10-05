@@ -124,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             if (!_showChart || !isLandsacape)
               Container(
-                height: availableHeight * 0.75,
+                height: availableHeight * (isLandsacape ? 1 : 0.75),
                 child: TransactionList(_transactions, _removeTransaaction),
               ),
           ],

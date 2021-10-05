@@ -12,8 +12,7 @@ class TransactionList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return transactions.isEmpty
-        ? LayoutBuilder(
-          builder: (ctx, constraints) {
+        ? LayoutBuilder(builder: (ctx, constraints) {
             return Column(
               children: <Widget>[
                 SizedBox(height: constraints.maxHeight * 0.05),
@@ -31,8 +30,7 @@ class TransactionList extends StatelessWidget {
                 )
               ],
             );
-          }
-        )
+          })
         : ListView.builder(
             itemCount: transactions.length,
             itemBuilder: (ctx, index) {
@@ -61,11 +59,25 @@ class TransactionList extends StatelessWidget {
                   subtitle: Text(
                     DateFormat('d MMM y').format(e.date),
                   ),
-                  trailing: IconButton(
-                    onPressed: () => onRemove(e.id),
-                    icon: const Icon(Icons.delete),
-                    color: Theme.of(context).errorColor,
-                  ),
+                  trailing: MediaQuery.of(context).size.width > 480
+                      ? TextButton.icon(
+                          onPressed: () => onRemove(e.id),
+                          icon: Icon(
+                            Icons.delete,
+                            color: Theme.of(context).errorColor,
+                          ),
+                          label: Text(
+                            'Excluir',
+                            style: TextStyle(
+                              color: Theme.of(context).errorColor
+                            ),
+                          ),
+                        )
+                      : IconButton(
+                          onPressed: () => onRemove(e.id),
+                          icon: const Icon(Icons.delete),
+                          color: Theme.of(context).errorColor,
+                        ),
                 ),
               );
             });
