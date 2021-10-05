@@ -43,6 +43,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> _transactions = [];
+  bool _showChart = false;
 
   List<Transaction> get _recentTransactions {
     return _transactions.where((element) {
@@ -84,6 +85,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isLandsacape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
     final appBar = AppBar(
       title: const Text('Despesas Pessoais'),
       actions: <Widget>[
@@ -94,9 +98,9 @@ class _MyHomePageState extends State<MyHomePage> {
       ],
     );
 
-    final availableHeight = MediaQuery.of(context).size.height 
-    - appBar.preferredSize.height
-    - MediaQuery.of(context).padding.top;
+    final availableHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
 
     return Scaffold(
       appBar: appBar,
@@ -104,14 +108,32 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Container(
-              height: availableHeight * 0.25,
-              child: Chart(_recentTransactions),
-            ),
-            Container(
-              height: availableHeight * 0.75,
-              child: TransactionList(_transactions, _removeTransaaction),
-            ),
+            if (isLandsacape)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text('Exibir Gráfico'),
+                  Switch(
+                    value: _showChart,
+                    onChanged: (value) {
+                      setState(() {
+                        _showChart = value;
+                      });
+                    },
+                    activeColor: Theme.of(context).colorScheme.secondary,
+                  ),
+                ],
+              ),
+            if (_showChart || !isLandsacape)
+              Container(
+                height: availableHeight * (isLandsacape ? 0.7 : 0.3),
+                child: Chart(_recentTransactions),
+              ),
+            if (!_showChart || !isLandsacape)
+              Container(
+                height: availableHeight * 0.75,
+                child: TransactionList(_transactions, _removeTransaaction),
+              ),
           ],
         ),
       ),
