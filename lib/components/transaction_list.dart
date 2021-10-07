@@ -35,7 +35,8 @@ class TransactionList extends StatelessWidget {
             itemCount: transactions.length,
             itemBuilder: (ctx, index) {
               final e = transactions[index];
-              return TransactionItem(e: e, onRemove: onRemove);
+              return TransactionItem(
+                  key: GlobalObjectKey(e), e: e, onRemove: onRemove);
             });
   }
 }

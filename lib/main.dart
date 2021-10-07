@@ -8,7 +8,7 @@ import './components/transaction_form.dart';
 import './components/transaction_list.dart';
 import 'models/transaction.dart';
 
-main() => runApp(ExpensesApp());
+main() => runApp(const ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
   const ExpensesApp({Key? key}) : super(key: key);

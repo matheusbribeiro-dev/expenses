@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/transaction.dart';
 import 'package:intl/intl.dart';
 
-class TransactionItem extends StatelessWidget {
+class TransactionItem extends StatefulWidget {
   const TransactionItem({
     Key? key,
     required this.e,
@@ -12,6 +12,11 @@ class TransactionItem extends StatelessWidget {
   final Transaction e;
   final void Function(String id) onRemove;
 
+  @override
+  State<TransactionItem> createState() => _TransactionItemState();
+}
+
+class _TransactionItemState extends State<TransactionItem> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -25,22 +30,22 @@ class TransactionItem extends StatelessWidget {
             padding: const EdgeInsets.all(6),
             child: FittedBox(
               child: Text(
-                'R\$${e.value}',
+                'R\$${widget.e.value}',
                 style: const TextStyle(color: Colors.white),
               ),
             ),
           ),
         ),
         title: Text(
-          e.title,
+          widget.e.title,
           style: Theme.of(context).textTheme.headline6,
         ),
         subtitle: Text(
-          DateFormat('d MMM y').format(e.date),
+          DateFormat('d MMM y').format(widget.e.date),
         ),
         trailing: MediaQuery.of(context).size.width > 480
             ? TextButton.icon(
-                onPressed: () => onRemove(e.id),
+                onPressed: () => widget.onRemove(widget.e.id),
                 icon: Icon(
                   Icons.delete,
                   color: Theme.of(context).errorColor,
@@ -53,7 +58,7 @@ class TransactionItem extends StatelessWidget {
                 ),
               )
             : IconButton(
-                onPressed: () => onRemove(e.id),
+                onPressed: () => widget.onRemove(widget.e.id),
                 icon: const Icon(Icons.delete),
                 color: Theme.of(context).errorColor,
               ),
